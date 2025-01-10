@@ -2,23 +2,20 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
 const WeatherInfo = ({ weatherData }) => {
-  if (!weatherData) return null;
-
-  const { name, main, weather, wind } = weatherData;
-  const { temp, humidity } = main;
-  const { description, icon } = weather[0];
+  const { dt_txt, main, weather } = weatherData;
+  const [details] = weather;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.city}>{name}</Text>
+    <View style={styles.card}>
+      <Text style={styles.date}>{new Date(dt_txt).toDateString()}</Text>
       <Image
         style={styles.icon}
-        source={{ uri: `https://openweathermap.org/img/wn/${icon}@4x.png` }}
+        source={{
+          uri: `https://openweathermap.org/img/wn/${details.icon}@2x.png`,
+        }}
       />
-      <Text style={styles.description}>{description.toUpperCase()}</Text>
-      <Text style={styles.temp}>{Math.round(temp)}°C</Text>
-      <Text style={styles.info}>Humidity: {humidity}%</Text>
-      <Text style={styles.info}>Wind Speed: {wind.speed} m/s</Text>
+      <Text style={styles.temp}>{main.temp}°C</Text>
+      <Text style={styles.description}>{details.description}</Text>
     </View>
   );
 };
@@ -26,30 +23,31 @@ const WeatherInfo = ({ weatherData }) => {
 export default WeatherInfo;
 
 const styles = StyleSheet.create({
-  container: {
+  card: {
+    backgroundColor: '#fff',
+    margin: 10,
+    borderRadius: 10,
+    padding: 15,
     alignItems: 'center',
-    margin: 20,
+    elevation: 3,
   },
-  city: {
-    fontSize: 28,
+  date: {
+    fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 5,
   },
   icon: {
-    width: 100,
-    height: 100,
-  },
-  description: {
-    fontSize: 18,
-    marginVertical: 5,
-    textTransform: 'capitalize',
+    width: 50,
+    height: 50,
+    marginBottom: 10,
   },
   temp: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: 5,
+    color: '#007AFF',
   },
-  info: {
+  description: {
     fontSize: 16,
-    color: '#555',
+    textTransform: 'capitalize',
   },
 });
